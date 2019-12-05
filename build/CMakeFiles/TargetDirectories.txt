@@ -1,0 +1,3 @@
+/home/vilius/Desktop/L3_LP_CudaThrust/build/CMakeFiles/rebuild_cache.dir
+/home/vilius/Desktop/L3_LP_CudaThrust/build/CMakeFiles/main.dir
+/home/vilius/Desktop/L3_LP_CudaThrust/build/CMakeFiles/edit_cache.dir
