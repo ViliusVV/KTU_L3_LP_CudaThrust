@@ -284,10 +284,6 @@ vector
 utility
 -
 
-../include/person.hpp
-string
--
-
 /home/vilius/Desktop/L3_LP_CudaThrust/src/main2.cu
 cuda_runtime.h
 /home/vilius/Desktop/L3_LP_CudaThrust/src/cuda_runtime.h
@@ -303,8 +299,6 @@ random
 -
 algorithm
 -
-person.hpp
-/home/vilius/Desktop/L3_LP_CudaThrust/src/person.hpp
 json.hpp
 /home/vilius/Desktop/L3_LP_CudaThrust/src/json.hpp
 iostream

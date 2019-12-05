@@ -16,15 +16,14 @@
 #define RESULT_FILE_NAME "data/IFF7-4_ValinskisV_3_res.txt"
 
 #define ENTRY_CNT_MAX 250
-#define MAX_STRING_LEN 4096
-#define CUDA_CORES 11
+#define MAX_STRING_LEN 256
+#define CUDA_CORES 33
 
 using namespace std;
 using json = nlohmann::json;
 
 typedef struct 
 {
-    int len;
     char str[MAX_STRING_LEN];
 } CudaString;
 
@@ -167,7 +166,6 @@ __global__ void doStuff(    int *cnt, CudaString *n, int *s, double *b,
     {
     int thread_id = threadIdx.x;
     int blockdimx = blockDim.x;
-    int work_size = *cnt / blockdimx;
     int rem = *cnt % blockdimx;
     printf("Count:%d\n", work_size);
     printf("Rem:%d\n", rem);

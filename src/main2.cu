@@ -5,7 +5,6 @@
 #include "device_launch_parameters.h"
 #include <random>
 #include <algorithm>
-#include "person.hpp"
 #include "json.hpp"
 #include <iostream>
 #include <fstream>
@@ -20,77 +19,88 @@
 #define RESULT_FILE_NAME "data/IFF7-4_ValinskisV_3_res.txt"
 
 #define ENTRY_CNT_MAX 250
-#define MAX_STRING_LEN 4096
+#define MAX_STRING_LEN 1024
 
 using namespace std;
 using json = nlohmann::json;
 using namespace thrust;
 
 
-typedef struct
+struct sPerson
 {
     char name[MAX_STRING_LEN];
     int streetNum;
     double balance;
-} sPerson;
+};
+
+typedef struct sPerson sPerson;
 
 
 // Function prototypes
 host_vector<sPerson> deserializeJsonFile(std::string fileName, int *count);
-void saveToFile(std::string fileName, Person outArr[], int outCnt);
+//void saveToFile(std::string fileName, Person outArr[], int outCnt);
 void generate_random_array(int* array, size_t size);
 
 
-struct crumple {
-   __device__ __host__ sPerson operator ()(sPerson accumulator, sPerson item) {
-        int dlen, slen;
-        // Get string lenght
-        for(dlen=0; accumulator.name[dlen]!='\0'; ++dlen); 
+// struct crumple {
+//     __host__ sPerson operator ()(sPerson accumulator, sPerson item) {
+//         int dlen, slen;
+//         // Get string lenght
+//         for(dlen=0; accumulator.name[dlen]!='\0'; ++dlen); 
 
-        // add chars til null terminator
-        for(slen=0; item.name[slen]!='\0'; ++slen, ++dlen)
-        {
-            accumulator.name[dlen] = item.name[slen];
-        }   
-        accumulator.streetNum = accumulator.streetNum + item.streetNum;
-        accumulator.balance = accumulator.balance + item.balance;
-        return accumulator;
+//         // add chars til null terminator
+//         for(slen=0; item.name[slen]!='\0'; ++slen, ++dlen)
+//         {
+//             accumulator.name[dlen] = item.name[slen];
+//         }   
+//         accumulator.streetNum = accumulator.streetNum + item.streetNum;
+//         accumulator.balance = accumulator.balance + item.balance;
+//         return accumulator;
+//     }
+// };
+
+struct add_int
+{
+    __device__ int operator ()(int accumulator, int item) {
+        return accumulator + item;
     }
 };
 
 int main() {   
-
     int peopleCount;
+
     cout << "Start L3 Thrust..." << endl;
+
     cout << "Reading parsing JSON file" << JSON_DATA_FILE << endl;
     host_vector<sPerson> people = deserializeJsonFile(JSON_DATA_FILE, &peopleCount);
 
-    //thrust::for_each(people.begin(), people.end(), [] (sPerson item) { cout << item.name << " \n";});
-    thrust::device_vector<sPerson> deviceVec = people;
-    // thrust::for_each(deviceVec.begin(), deviceVec.end(), [] (sPerson item) { cout << item.name << " \n";});
-
-
+    // Empty struct for initial accumulator
     sPerson temp;
     temp.name[0] = '\0';
     temp.streetNum = 0;
     temp.balance = 0.0;
 
-    auto res = reduce(deviceVec.begin(), deviceVec.end(), deviceVec, crumple());
+    thrust::device_vector<int> deviceVec(peopleCount);
+    printf("Count:%d\n", (int)deviceVec.size());
 
-    string tmpname(res.name);
-    int tmpst = res.streetNum;
-    double tmpbal = res.balance;
 
-    Person resp = Person(tmpname,tmpst, tmpbal);
-    cout << resp.InfoHeader();
-    cout << resp.GetStr();
+    // thrust::for_each(deviceVec.begin(), deviceVec.end(), [] (sPerson item) { cout << item.name << " \n";});
+    // auto res = reduce(people.begin(), people.end(), temp, ;
 
-    cout << "Saving to file..." << endl;
+    // string tmpname(res.name);
+    // int tmpst = res.streetNum;
+    // double tmpbal = res.balance;
 
-    std::ofstream ofs(RESULT_FILE_NAME);
-    ofs << resp.InfoHeader(); // print out table header
-    ofs << resp.GetStr();
-    ofs.close();
+    // Person resp = Person(tmpname,tmpst, tmpbal);
+    // cout << resp.InfoHeader();
+    // cout << resp.GetStr();
+
+    // cout << "Saving to file..." << endl;
+
+    // std::ofstream ofs(RESULT_FILE_NAME);
+    // ofs << resp.InfoHeader(); // print out table header
+    // ofs << resp.GetStr();
+    // ofs.close();
     
     return 0;
 }
@@ -121,14 +131,14 @@ host_vector<sPerson> deserializeJsonFile(std::string fileName, int *count)
 }
 
 // Saves people data structure to text file
-void saveToFile(std::string fileName, Person outArr[], int outCnt)
-{
-    std::ofstream ofs(fileName);
-    ofs << outArr[0].InfoHeader(); // print out table header
-    for (auto i = 1; i < outCnt; i++)
-    {
-         ofs << outArr[i].GetStr();
-    }
+// void saveToFile(std::string fileName, Person outArr[], int outCnt)
+// {
+//     std::ofstream ofs(fileName);
+//     ofs << outArr[0].InfoHeader(); // print out table header
+//     for (auto i = 1; i < outCnt; i++)
+//     {
+//          ofs << outArr[i].GetStr();
+//     }
 
-    ofs.close();
-}
+//     ofs.close();
+// }
