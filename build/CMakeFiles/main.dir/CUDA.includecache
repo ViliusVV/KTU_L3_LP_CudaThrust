@@ -284,6 +284,10 @@ vector
 utility
 -
 
+../include/person.hpp
+string
+-
+
 /home/vilius/Desktop/L3_LP_CudaThrust/src/main2.cu
 cuda_runtime.h
 /home/vilius/Desktop/L3_LP_CudaThrust/src/cuda_runtime.h
@@ -316,5 +320,19 @@ thrust/device_vector.h
 thrust/functional.h
 -
 thrust/transform.h
+-
+thrust/copy.h
+-
+thrust/device_vector.h
+-
+thrust/execution_policy.h
+-
+thrust/reduce.h
+-
+person.hpp
+/home/vilius/Desktop/L3_LP_CudaThrust/src/person.hpp
+stdio.h
+-
+string.h
 -
 

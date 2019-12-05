@@ -3,6 +3,7 @@
 
 CMakeFiles/main.dir/home/vilius/Desktop/L3_LP_CudaThrust/src/main2.cu.o
  ../include/nlohmann/json.hpp
+ ../include/person.hpp
  /home/vilius/Desktop/L3_LP_CudaThrust/src/main2.cu
 CMakeFiles/main.dir/home/vilius/Desktop/L3_LP_CudaThrust/include/person.cpp.o
  ../include/nlohmann/json.hpp
